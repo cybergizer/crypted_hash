@@ -1,7 +1,7 @@
 # What is CryptedHash?
 
 
-**CryptedHash** is an open source gem, released under the MIT License.
+**CryptedHash** is an open source gem, released under the Apache 2 License.
 
 [![Build Status](https://api.travis-ci.org/cybergizer/crypted_hash.svg?branch=master)](http://travis-ci.org/plataformatec/devise)
 
