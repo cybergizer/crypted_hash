@@ -46,4 +46,16 @@ RSpec.describe CryptedHash do
     expect(crypted_hash[:vkontakte]).to eq('vkcom')
     expect(crypted_hash).to be_instance_of(CryptedHash)
   end
+
+  it "saves encrypted data in file" do
+    hash = CryptedHash.new("secret")
+    hash[:github] = "password"
+
+    FileUtils.rm("./tmp/test")
+    hash.save!("./tmp/test")
+    saved_file_content = File.read("./tmp/test")
+
+    expect(saved_file_content).not_to include("github")
+    expect(saved_file_content).not_to include("password")
+  end
 end

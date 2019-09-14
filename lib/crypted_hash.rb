@@ -17,14 +17,14 @@ class CryptedHash
   end
 
   def save!(path)
-    file = File.open(path, 'w+')
-    file.puts(Marshal.dump(hash))
-    file.close
+    serialized_hash = Marshal.dump(hash)
+    File.write(path, Cipher.new(secret).encrypt(serialized_hash))
   end
 
   def self.load(path, secret)
-    file = File.read(path)
-    hash = Marshal.load(file)
+    encrypted_serialized_hash = File.read(path)
+    serialized_hash = Cipher.new(secret).decrypt(encrypted_serialized_hash)
+    hash = Marshal.load(serialized_hash)
     self.new(secret, hash)
   end
 end
