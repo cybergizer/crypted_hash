@@ -1,3 +1,5 @@
+require "crypted_hash/cipher"
+
 class CryptedHash
   attr_reader :secret, :hash
 
