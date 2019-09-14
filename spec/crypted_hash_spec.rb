@@ -1,61 +1,71 @@
 require "spec_helper"
-require 'fileutils'
+require "fileutils"
+require "tempfile"
 
 RSpec.describe CryptedHash do
+  let(:secret) { "secret" }
+
   it "can be instantiated" do
-    expect(CryptedHash.new("test")).to be_instance_of(CryptedHash)
+    expect(CryptedHash.new(secret)).to be_instance_of(CryptedHash)
   end
 
   it "stores the secret" do
-    hash = CryptedHash.new("test")
+    hash = CryptedHash.new(secret)
 
-    expect(hash.secret).to eq('test')
+    expect(hash.secret).to eq(secret)
   end
 
   it "can be prepopulated" do
-    hash = CryptedHash.new("test", foo: :bar)
+    hash = CryptedHash.new(secret, foo: :bar)
 
     expect(hash[:foo]).to eq(:bar)
   end
 
-  it 'saves values' do
-    hash = CryptedHash.new('test')
+  it "stores values" do
+    hash = CryptedHash.new(secret)
 
-    hash[:vk] = 'vkcom'
-
-    expect(hash[:vk]).to eq('vkcom')
-  end
-
-  it 'saves file' do
-    hash = CryptedHash.new('test')
-
-    FileUtils.rm('./tmp/test')
-    hash.save!('./tmp/test')
-
-    expect(File.exists?('./tmp/test')).to eq(true)
-  end
-
-  it 'loads file' do
-    hash = CryptedHash.new('test')
-    hash[:vkontakte] = 'vkcom'
-
-    FileUtils.rm('./tmp/test')
-    hash.save!('./tmp/test')
-    crypted_hash = CryptedHash.load('./tmp/test', 'test')
-
-    expect(crypted_hash[:vkontakte]).to eq('vkcom')
-    expect(crypted_hash).to be_instance_of(CryptedHash)
-  end
-
-  it "saves encrypted data in file" do
-    hash = CryptedHash.new("secret")
     hash[:github] = "password"
 
-    FileUtils.rm("./tmp/test")
-    hash.save!("./tmp/test")
-    saved_file_content = File.read("./tmp/test")
+    expect(hash[:github]).to eq("password")
+  end
 
-    expect(saved_file_content).not_to include("github")
-    expect(saved_file_content).not_to include("password")
+  context "when persisting data to disk" do
+    before :each do
+      @tempfile = Tempfile.create
+    end
+
+    after :each do
+      File.unlink(@tempfile.path)
+    end
+
+    it "saves hash data to a file" do
+      hash = CryptedHash.new("secret")
+
+      hash.save!(@tempfile.path)
+
+      expect(File.empty?(@tempfile.path)).to be false
+    end
+
+    it "loads hash data from a file" do
+      hash = CryptedHash.new("secret")
+      hash[:github] = "password"
+      hash.save!(@tempfile.path)
+
+      crypted_hash = CryptedHash.load(@tempfile.path, "secret")
+
+      expect(crypted_hash[:github]).to eq("password")
+      expect(crypted_hash).to be_instance_of(CryptedHash)
+    end
+
+    it "saves encrypted data in file" do
+      hash = CryptedHash.new("secret")
+      hash[:github] = "password"
+
+      hash.save!(@tempfile.path)
+      saved_file_content = File.read(@tempfile.path)
+
+      expect(saved_file_content).not_to include("github")
+      expect(saved_file_content).not_to include("password")
+    end
   end
 end
