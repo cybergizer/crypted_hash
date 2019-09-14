@@ -1,6 +1,8 @@
 require "crypted_hash/cipher"
 
 class CryptedHash
+  class DecryptionError < Exception; end
+
   attr_reader :secret, :hash
 
   def initialize(secret, prepopulate_hash = {})
@@ -26,5 +28,7 @@ class CryptedHash
     serialized_hash = Cipher.new(secret).decrypt(encrypted_serialized_hash)
     hash = Marshal.load(serialized_hash)
     self.new(secret, hash)
+  rescue OpenSSL::Cipher::CipherError
+    raise DecryptionError.new("Wrong file content or secret")
   end
 end

@@ -39,7 +39,7 @@ RSpec.describe CryptedHash do
     end
 
     it "saves hash data to a file" do
-      hash = CryptedHash.new("secret")
+      hash = CryptedHash.new(secret)
 
       hash.save!(@tempfile.path)
 
@@ -47,18 +47,18 @@ RSpec.describe CryptedHash do
     end
 
     it "loads hash data from a file" do
-      hash = CryptedHash.new("secret")
+      hash = CryptedHash.new(secret)
       hash[:github] = "password"
       hash.save!(@tempfile.path)
 
-      crypted_hash = CryptedHash.load(@tempfile.path, "secret")
+      crypted_hash = CryptedHash.load(@tempfile.path, secret)
 
       expect(crypted_hash[:github]).to eq("password")
       expect(crypted_hash).to be_instance_of(CryptedHash)
     end
 
     it "saves encrypted data in file" do
-      hash = CryptedHash.new("secret")
+      hash = CryptedHash.new(secret)
       hash[:github] = "password"
 
       hash.save!(@tempfile.path)
@@ -66,6 +66,14 @@ RSpec.describe CryptedHash do
 
       expect(saved_file_content).not_to include("github")
       expect(saved_file_content).not_to include("password")
+    end
+
+    it "raise when secret is wrong" do
+      hash = CryptedHash.new(secret)
+      hash[:github] = "password"
+      hash.save!(@tempfile.path)
+
+      expect { CryptedHash.load(@tempfile.path, "wrong #{secret}") }.to raise_error(CryptedHash::DecryptionError)
     end
   end
 end
