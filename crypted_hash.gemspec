@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.files       = ["lib/crypted_hash.rb"]
   s.homepage    =
     'http://rubygems.org/gems/crypted_hash'
-  s.license     = 'Apache License'
+  s.license     = 'Apache-2.0'
 
   s.files       = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
