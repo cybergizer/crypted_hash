@@ -3,17 +3,23 @@ require 'fileutils'
 
 RSpec.describe CryptedHash do
   it "can be instantiated" do
-    expect(CryptedHash.new(key: "test")).to be_instance_of(CryptedHash)
+    expect(CryptedHash.new("test")).to be_instance_of(CryptedHash)
   end
 
-  it "stores the key" do
-    hash = CryptedHash.new(key: "test")
+  it "stores the secret" do
+    hash = CryptedHash.new("test")
 
-    expect(hash.key).to eq('test')
+    expect(hash.secret).to eq('test')
+  end
+
+  it "can be prepopulated" do
+    hash = CryptedHash.new("test", foo: :bar)
+
+    expect(hash[:foo]).to eq(:bar)
   end
 
   it 'saves values' do
-    hash = CryptedHash.new(key: 'test')
+    hash = CryptedHash.new('test')
 
     hash[:vk] = 'vkcom'
 
@@ -21,7 +27,7 @@ RSpec.describe CryptedHash do
   end
 
   it 'saves file' do
-    hash = CryptedHash.new(key: 'test')
+    hash = CryptedHash.new('test')
 
     FileUtils.rm('./tmp/test')
     hash.save!('./tmp/test')
@@ -30,7 +36,7 @@ RSpec.describe CryptedHash do
   end
 
   it 'loads file' do
-    hash = CryptedHash.new(key: 'test')
+    hash = CryptedHash.new('test')
     hash[:vkontakte] = 'vkcom'
 
     FileUtils.rm('./tmp/test')
