@@ -1,8 +1,9 @@
 class CryptedHash
-  attr_reader :key, :hash
-  def initialize(key:, default_hash: {})
-    @key = key
-    @hash = default_hash
+  attr_reader :secret, :hash
+
+  def initialize(secret, prepopulate_hash = {})
+    @secret = secret
+    @hash = prepopulate_hash
   end
 
   def [](key)
@@ -19,9 +20,9 @@ class CryptedHash
     file.close
   end
 
-  def self.load(path, key)
+  def self.load(path, secret)
     file = File.read(path)
     hash = Marshal.load(file)
-    self.new(key: key, default_hash: hash)
+    self.new(secret, hash)
   end
 end

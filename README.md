@@ -29,7 +29,7 @@ Then run `bundle install` (if you don't have `bundler` gem yet run `gem install 
 
 Add and save secrets:
 ```rb
-secrets = CryptedHash.new(key: "secret key")
+secrets = CryptedHash.new("secret key")
 
 secrets[:vkontakte] = "kitty123"
 
