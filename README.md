@@ -10,8 +10,8 @@
 ## Getting started
 Now **CryptedHash** powered by the holy spirit (check current development status above). But in future you'll need:
 
-* Ruby >= 2.3.0
-* Rails >= 4.0
+* Ruby >= 2.6
+* Rails >= 5.0
 
 
 ## Setup
@@ -45,7 +45,6 @@ https://github.com/cybergizer/crypted_hash/graphs/contributors
 
 ## License
 
-MIT License. Copyright 2017-2018 Cybergizer. http://cybergizer.com
+MIT License. Copyright 2017-2020 Cybergizer. https://cybergizer.com
 
-You are not granted rights or licenses to the trademarks of Cybergizer, including without limitation the CryptedHash name or logo.
-
+You are not granted rights or licenses to the trademarks of Cybergizer LLC, including without limitation the CryptedHash name or logo.
