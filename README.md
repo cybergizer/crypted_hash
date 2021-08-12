@@ -1,7 +1,7 @@
 # What is CryptedHash?
 
 
-**CryptedHash** is an open source gem, released under the MIT License.
+**CryptedHash** is an open source gem, released under the Apache 2 License.
 
 [![Build Status](https://api.travis-ci.org/cybergizer/crypted_hash.svg?branch=master)](http://travis-ci.org/plataformatec/devise)
 
@@ -27,8 +27,28 @@ Then run `bundle install` (if you don't have `bundler` gem yet run `gem install 
 
 ## The Basics
 
-Coming soon
+Add and save secrets:
+```rb
+secrets = CryptedHash.new("secret key")
 
+secrets[:vkontakte] = "kitty123"
+
+secrets.save!("~/.passwords")
+```
+
+Load secrets with correct key:
+```rb
+secrets = CryptedHash.load("~/.passwords", "secret key")
+
+secrets[:vkontakte] #=> "kitty123"
+```
+
+Load secrets with wrong key:
+```rb
+secrets = CryptedHash.load("~/.passwords", "wrong key")
+
+secrets[:vkontakte] #=> "x3p^73b3)"
+```
 
 ## Changelog
 
